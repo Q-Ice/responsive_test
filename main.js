@@ -45,6 +45,7 @@ const app = {
     hanleEvent: function() {
         _this = this
         this.update();
+        areaText.focus()
         btnPlus.onclick = function (e) {
             const note = areaText.value;
             if (note.trim() != '') {
