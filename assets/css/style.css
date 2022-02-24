@@ -17,7 +17,7 @@ body {
 
 .container {
     width: 95%;
-    border: 2px solid #333;
+    border: 0.1px solid #333;
     border-radius: 15px;
     display: flex;
     overflow: hidden;
@@ -29,7 +29,6 @@ body {
     resize: none;
     padding: 8px;
     letter-spacing: 1px;
-    border-radius: 15px;
     outline: none;
     border: none;
     font-size: 16px;
@@ -61,10 +60,7 @@ body {
 .listTodo-item {
     width: 95%;
     min-height: 45px;
-    border: 2px solid #333;
-    border-radius: 15px;
     display: flex;
-    box-sizing: none;
 }
 
 .listTodo-item-name {
