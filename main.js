@@ -1,106 +1,61 @@
-* {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+const $ = document.querySelector.bind(document);
+const $$ = document.querySelectorAll.bind(document);
+
+const btnPlus = $('.areaTodo-plus');
+const areaText = $('.areaTodo-text');
+const listTodo = $('#listTodo');
+
+let list = [];
+if (!localStorage.getItem('list')) {
+    localStorage.setItem('list', JSON.stringify(list));
+} else {
+    list = JSON.parse(localStorage.getItem('list'));
 }
-
-body {
-    font-family: Arial, Helvetica, sans-serif
-}
-
-#main {
-    padding: 12px;
-    display: flex;
-    flex-direction: column;
-    margin-top: 20px;
-}
-
-.container {
-    width: 95%;
-    border: 0.1px solid #333;
-    border-radius: 15px;
-    display: flex;
-    overflow: hidden;
-    margin: 0 auto;
-}
-
-.areaTodo-text {
-    flex: 7;
-    resize: none;
-    padding: 8px;
-    letter-spacing: 1px;
-    outline: none;
-    border: none;
-    font-size: 16px;
-}
-
-.btn {
-    padding: 2px 25px;
-    transform: translateX(0px);
-    font-size: 30px;
-    background-color: #ccc;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.btn.areaTodo-plus {
-    font-size: 35px;
-}
-
-.btn:hover {
-    background-color: red;
-}
-
-.btn.areaTodo-plus:hover {
-    background-color: rgb(9, 185, 9);
-    cursor: pointer;
-}
-
-.listTodo-item {
-    width: 95%;
-    min-height: 45px;
-    display: flex;
-}
-
-.listTodo-item-name {
-    flex: 7;
-    align-self: center;
-    padding-left: 10px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-}
-
-.close {
-    cursor: pointer;
-}
-
-.areaTodo + #listTodo {
-    margin-top: 80px;
-}
-
-.listTodo-item + .listTodo-item {
-    margin-top: 20px;
-}
-
-@media (min-width: 740px) {
-    #main {
-        flex-direction: row;
-        margin-top: 50px;
-    }
-
-    .areaTodo {
-        max-height: 60px;
-        margin-right: 45px;
-        width: 45%;
-    }
-
-    #listTodo {
-        flex: 1;
-    }
-
-    .areaTodo + #listTodo {
-        margin-top: 0px;
+const app = {
+    addTodo: function(note) {
+        const listTodoItem = document.createElement('div');
+        listTodoItem.classList.add('container', 'listTodo-item');
+        listTodoItem.innerHTML = `
+            <div class="listTodo-item-name">${note}</div>
+            <span class="btn close">&times;</span>
+        `;
+        listTodo.appendChild(listTodoItem);
+        list.push(listTodoItem.outerHTML);
+        localStorage.setItem('list', JSON.stringify(list));
+        this.delete()
+    },
+    delete: function() {
+        const listTodo2 = $$('.container.listTodo-item');
+        let counter = 0;
+        listTodo2.forEach(function(item, index) {
+            item.onclick = function(e) {
+                if (e.target.closest('.close')) {
+                    listTodo.removeChild(item);
+                    counter++;
+                    list.splice(index - counter, 1);
+                    localStorage.setItem('list', JSON.stringify(list));
+                }
+            }
+        })
+    },
+    update: function() {
+        const htmls = list.join('')
+        listTodo.innerHTML = htmls
+    },
+    hanleEvent: function() {
+        _this = this
+        this.update();
+        btnPlus.onclick = function (e) {
+            const note = areaText.value;
+            if (note.trim() != '') {
+                _this.addTodo(note);
+            }
+            areaText.focus();
+            areaText.value = '';
+        }
+        this.delete()
     }
 }
+
+app.hanleEvent();
+
